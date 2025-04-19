@@ -1,0 +1,22 @@
+# Use postgres/example user/password credentials
+version: '3.9'
+
+services:
+  database:
+    image: postgres:17-alpine
+    container_name: datascience-piscine-database
+    restart: always
+    shm_size: 128mb
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+
+  dbeaver:
+    container_name: datascience-piscine-dbeaver
+    image: dbeaver/cloudbeaver:25
+    restart: always
+    ports:
+      - 8978:8978
