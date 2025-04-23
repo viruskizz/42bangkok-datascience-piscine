@@ -6,12 +6,10 @@ BEGIN
     EXECUTE format('
         CREATE TABLE %I (
             id SERIAL PRIMARY KEY,
-            event_time TIMESTAMP NOT NULL,
-            event_type VARCHAR,
-            product_id INTEGER,
-            price REAL,
-            user_id INTEGER,
-            user_session VARCHAR
+            product_id INTEGER NOT NULL,
+            category_id BIGINT,
+            category_code VARCHAR,
+            brand VARCHAR
         )', table_name);
     RAISE NOTICE '% Table created', table_name;
     EXECUTE format('SELECT * FROM %I', table_name);
@@ -21,12 +19,12 @@ END; $$ LANGUAGE plpgsql;
 CREATE OR REPLACE PROCEDURE import_items(table_name TEXT, filename TEXT) AS $$
 DECLARE
     count INTEGER;
+    columns TEXT := 'product_id, category_id, category_code, brand';
 BEGIN
     RAISE NOTICE 'Importing data from %s file to %s', filename, table_name;
     EXECUTE format('
-        COPY %I(event_time, event_type, product_id, price, user_id, user_session)
-        FROM %L DELIMITER '','' csv HEADER
-        ', table_name, filename);
+        COPY %I(%s) FROM %L DELIMITER '','' csv HEADER
+        ', table_name, columns, filename);
     EXECUTE format('SELECT COUNT(id) FROM %I', table_name) into count;
     RAISE NOTICE '% has been imported', count;
 END; $$ LANGUAGE plpgsql;
