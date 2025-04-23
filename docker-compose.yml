@@ -8,6 +8,7 @@ services:
     shm_size: 128mb
     volumes:
       - ./ds00:/usr/src/app/ds00
+      - ./ds01:/usr/src/app/ds01
     ports:
       - 5432:5432
     environment:

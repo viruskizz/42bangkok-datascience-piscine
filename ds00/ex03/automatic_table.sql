@@ -5,7 +5,6 @@ BEGIN
     EXECUTE format('DROP TABLE IF EXISTS %I', table_name);
     EXECUTE format('
         CREATE TABLE %I (
-            id SERIAL PRIMARY KEY,
             event_time TIMESTAMP NOT NULL,
             event_type VARCHAR,
             product_id INTEGER,
@@ -27,7 +26,7 @@ BEGIN
     EXECUTE format('
         COPY %I(%s) FROM %L DELIMITER '','' csv HEADER
         ', table_name, columns, filename);
-    EXECUTE format('SELECT COUNT(id) FROM %I', table_name) into count;
+    EXECUTE format('SELECT COUNT(event_time) FROM %I', table_name) into count;
     RAISE NOTICE '% has been imported', count;
 END; $$ LANGUAGE plpgsql;
 

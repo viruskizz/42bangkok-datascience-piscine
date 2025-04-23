@@ -5,7 +5,6 @@ BEGIN
     EXECUTE format('DROP TABLE IF EXISTS %I', table_name);
     EXECUTE format('
         CREATE TABLE %I (
-            id SERIAL PRIMARY KEY,
             product_id INTEGER NOT NULL,
             category_id BIGINT,
             category_code VARCHAR,
@@ -25,7 +24,7 @@ BEGIN
     EXECUTE format('
         COPY %I(%s) FROM %L DELIMITER '','' csv HEADER
         ', table_name, columns, filename);
-    EXECUTE format('SELECT COUNT(id) FROM %I', table_name) into count;
+    EXECUTE format('SELECT COUNT(product_id) FROM %I', table_name) into count;
     RAISE NOTICE '% has been imported', count;
 END; $$ LANGUAGE plpgsql;
 
