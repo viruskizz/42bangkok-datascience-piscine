@@ -16,6 +16,7 @@ BEGIN
     EXECUTE format('SELECT * FROM %I', table_name);
 END; $$ LANGUAGE plpgsql;
 
+-- Merge Tables
 CREATE OR REPLACE PROCEDURE merge_tables(source_pattern VARCHAR, target_table VARCHAR) AS $$
 DECLARE
     tb RECORD;
@@ -35,5 +36,6 @@ BEGIN
     RAISE NOTICE '% has been merged to %s', count, target_table;
 END; $$ LANGUAGE plpgsql;
 
+-- Main
 CALL create_table('customers');
 CALL merge_tables('data_%', 'customers');
