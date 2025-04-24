@@ -1,12 +1,18 @@
 #!/bin/bash
-# EX03
+# Ex02
+psql -h localhost\
+    -d $POSTGRES_DB\
+    -U $POSTGRES_USER \
+    -f ds00/ex02/table.sql
+
+# Ex03
 psql -h localhost\
     -d $POSTGRES_DB\
     -U $POSTGRES_USER \
     -f ds00/ex03/automatic_table.sql \
     -v dirpath=/usr/src/app/ds00/assets/customer/
 
-# EX04
+# Ex04
 psql -h localhost\
     -d $POSTGRES_DB\
     -U $POSTGRES_USER \

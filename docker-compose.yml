@@ -16,9 +16,12 @@ services:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
 
-  dbeaver:
-    container_name: datascience-piscine-dbeaver
-    image: dbeaver/cloudbeaver:25
+  pgadmin4:
+    container_name: datascience-piscine-pgadmin4
+    image: dpage/pgadmin4:9.2
+    environment:
+      - PGADMIN_DEFAULT_EMAIL
+      - PGADMIN_DEFAULT_PASSWORD
     restart: always
     ports:
-      - 8978:8978
+      - 8000:80

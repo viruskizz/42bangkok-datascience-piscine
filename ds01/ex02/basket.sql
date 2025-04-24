@@ -7,9 +7,7 @@
 --     HAVING count(event_time) > 1
 -- );
 
--- SELECT COUNT(*) FROM (
-DELETE FROM customers
-WHERE event_time IN (
+SELECT event_time FROM (
     SELECT event_time FROM (
         SELECT
             event_time,
@@ -20,4 +18,4 @@ WHERE event_time IN (
         FROM customers
     ) as t
     WHERE t.row_num > 1
-);
+) LIMIT 10;

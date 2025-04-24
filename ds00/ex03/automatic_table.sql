@@ -5,7 +5,7 @@ BEGIN
     EXECUTE format('DROP TABLE IF EXISTS %I', table_name);
     EXECUTE format('
         CREATE TABLE %I (
-            event_time TIMESTAMP NOT NULL,
+            event_time TIMESTAMPTZ NOT NULL,
             event_type VARCHAR,
             product_id INTEGER,
             price REAL,

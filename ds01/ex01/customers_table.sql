@@ -12,6 +12,9 @@ BEGIN
             user_id INTEGER,
             user_session UUID
         )', table_name);
+    EXECUTE format('
+        CREATE INDEX idx_customers_event_time ON %I(event_time)
+    ', table_name)
     RAISE NOTICE '% Table created', table_name;
     EXECUTE format('SELECT * FROM %I', table_name);
 END; $$ LANGUAGE plpgsql;
