@@ -1,5 +1,22 @@
+CREATE OR REPLACE FUNCTION get_duplicated_count()
+RETURNS INTEGER
+LANGUAGE plpgsql AS $$
+DECLARE
+   count_result INTEGER;
+BEGIN
+    SELECT COUNT(*)
+    INTO count_result
+    FROM (
+        SELECT event_time, event_type, product_id, count(event_time)
+        FROM customers
+        GROUP BY event_time, event_type, product_id
+        HAVING count(event_time) > 1
+    );
+    RETURN count_result;
+END;
+$$;
 
--- Create Table
+-- Remove Duplicated Row
 CREATE OR REPLACE PROCEDURE remove_duplicates(table_name VARCHAR) AS $$
 DECLARE
     iteration INTEGER := 0;
@@ -20,50 +37,54 @@ BEGIN
                 FROM customers
             ) sub
             WHERE row_num > 1
-            LIMIT 10
+            LIMIT 200
         )
         DELETE FROM customers
         WHERE ctid IN (SELECT ctid FROM duplicates);
         GET DIAGNOSTICS rows_deleted = ROW_COUNT;
 
-        iteration = iteration + 1;
-        total_delete = total_delete + rows_deleted
-        RAISE NOTICE '[%] % > %', iteration, rows_deleted, total_deleted;
-        EXIT WHEN iteration = 10;
+        iteration := iteration + 1;
+        total_deleted := total_deleted + rows_deleted;
+        RAISE NOTICE '[%] removed % > % total', iteration, rows_deleted, total_deleted;
+        -- EXIT WHEN iteration = 10;
+        EXIT WHEN rows_deleted = 0;
     END LOOP;
     RAISE NOTICE 'Removed all duplicated';
-END; $$ LANGUAGE plpgsql;
+END;
+$$ LANGUAGE plpgsql;
 
-CALL remove_duplicates('customers')
+CREATE OR REPLACE PROCEDURE remove_closeto(table_name VARCHAR) AS $$
+DECLARE
+    iteration INTEGER := 0;
+    rows_deleted INTEGER := 0;
+    total_deleted INTEGER := 0;
+BEGIN
+    LOOP
+        WITH to_delete AS (
+            SELECT a.ctid
+            FROM customers a
+            JOIN customers b
+              ON a.ctid <> b.ctid
+              AND a.product_id = b.product_id
+              AND a.event_type = b.event_type
+            --   AND EXTRACT(EPOCH FROM b.event_time - a.event_time) = 1
+              AND b.event_time = a.event_time + INTERVAL '1 second' -- Faster than epoch
+            LIMIT 200
+        )
+        DELETE FROM customers
+        WHERE ctid IN (SELECT ctid FROM to_delete);
 
--- SELECT 
---     a.event_time as a_event_time,
---     b.event_time as b_event_time,
---     a.product_id as product_id,
---     a.event_type as event_type
--- FROM customers as a
--- LEFT JOIN customers as b
---     ON a.product_id = b.product_id
---     AND a.event_type = b.event_type
---     AND a.event_time = b.event_time
--- WHERE EXTRACT(EPOCH FROM a.event_time - b.event_time) = 1
--- LIMIT 1000;
+        GET DIAGNOSTICS rows_deleted = ROW_COUNT;
 
--- CREATE OR REPLACE FUNCTION count_dup() RETURNS INTEGER AS $$
--- DECLARE
---     count_result INTEGER;
--- BEGIN
-    -- SELECT
-    --     COUNT(*)
-    -- FROM customers as a
-    -- LEFT JOIN customers as b
-    --     ON a.product_id = b.product_id
-    --     AND a.event_type = b.event_type
-    -- WHERE EXTRACT(EPOCH FROM a.event_time - b.event_time) = 0;
---     INTO count_result;
+        iteration := iteration + 1;
+        total_deleted := total_deleted + rows_deleted;
+        RAISE NOTICE '[%] removed % > % total', iteration, rows_deleted, total_deleted;
+        -- EXIT WHEN iteration = 3;
+        EXIT WHEN rows_deleted = 0;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
 
---     RETURN count_result;
--- END; $$ LANGUAGE plpgsql;
-
--- SELECT count_dup();
-
+CALL remove_duplicates('customers');
+CALL remove_closeto('customers');
+-- SELECT get_duplicated_count();

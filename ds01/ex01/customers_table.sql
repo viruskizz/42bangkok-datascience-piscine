@@ -5,16 +5,16 @@ BEGIN
     EXECUTE format('DROP TABLE IF EXISTS %I', table_name);
     EXECUTE format('
         CREATE TABLE %I (
-            event_time TIMESTAMP NOT NULL,
+            event_time TIMESTAMPTZ NOT NULL,
             event_type VARCHAR,
             product_id INTEGER,
             price REAL,
             user_id INTEGER,
             user_session UUID
         )', table_name);
-    EXECUTE format('
-        CREATE INDEX idx_customers_event_time ON %I(event_time)
-    ', table_name)
+    -- EXECUTE format('
+    --     CREATE INDEX idx_customers_event_time ON %I(event_time)
+    -- ', table_name)
     RAISE NOTICE '% Table created', table_name;
     EXECUTE format('SELECT * FROM %I', table_name);
 END; $$ LANGUAGE plpgsql;
