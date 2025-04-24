@@ -32,11 +32,11 @@ BEGIN
             AND tablename LIKE source_pattern
             AND tablename != target_table
     LOOP
-        RAISE NOTICE 'Merging %s to %s', tb.tablename, target_table;
+        RAISE NOTICE 'Merging % to %', tb.tablename, target_table;
         EXECUTE format('INSERT INTO %I SELECT * FROM %I', target_table, tb.tablename);
     END LOOP;
     EXECUTE format('SELECT COUNT(product_id) FROM %I', target_table) into count;
-    RAISE NOTICE '% has been merged to %s', count, target_table;
+    RAISE NOTICE '% has been merged to %', count, target_table;
 END; $$ LANGUAGE plpgsql;
 
 -- Main
