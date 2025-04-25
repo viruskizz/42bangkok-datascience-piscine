@@ -15,6 +15,16 @@ services:
       - POSTGRES_DB
       - POSTGRES_USER
       - POSTGRES_PASSWORD
+  
+  jupyter:
+    image: quay.io/jupyter/base-notebook
+    container_name: datascience-piscine-jupyter
+    restart: always
+    volumes:
+      - ./ds02:/home/jovyan/work/ds02
+    ports:
+      - 8888:8888
+
 
   pgadmin4:
     container_name: datascience-piscine-pgadmin4

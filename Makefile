@@ -16,6 +16,12 @@ down:
 exec:
 	docker exec -it ${CONTAINER_NAME} /bin/bash
 
+jupyter:
+	docker exec -it ${NAME}-jupyter /bin/bash
+
+log:
+	docker logs datascience-piscine-jupyter
+
 clean:
 	docker stop $(docker ps -qa)
 	docker rm $(docker ps -qa)
