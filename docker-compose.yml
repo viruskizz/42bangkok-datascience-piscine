@@ -24,7 +24,13 @@ services:
       - ./ds02:/home/jovyan/work/ds02
     ports:
       - 8888:8888
-
+    user: 1000:100
+    environment:
+      - JUPYTER_TOKEN
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+    command: start-notebook.sh --NotebookApp.notebook_dir=/home/jovyan/work/
 
   pgadmin4:
     container_name: datascience-piscine-pgadmin4
