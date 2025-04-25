@@ -25,22 +25,25 @@ DECLARE
 BEGIN
     RAISE NOTICE 'Start to remove all duplicated';
     LOOP
-        WITH duplicates AS (
-            SELECT ctid
-            FROM (
-                SELECT
-                    ctid,
-                    ROW_NUMBER() OVER (
-                        PARTITION BY product_id, event_type, event_time
-                        ORDER BY event_time
-                    ) AS row_num
-                FROM customers
-            ) sub
-            WHERE row_num > 1
-            LIMIT 200
-        )
-        DELETE FROM customers
-        WHERE ctid IN (SELECT ctid FROM duplicates);
+        EXECUTE format(
+            $f$
+            WITH duplicates AS (
+                SELECT ctid
+                FROM (
+                    SELECT ctid,
+                           ROW_NUMBER() OVER (
+                               PARTITION BY product_id, event_type, event_time
+                               ORDER BY event_time
+                           ) AS row_num
+                    FROM %I
+                ) sub
+                WHERE row_num > 1
+                LIMIT 500
+            )
+            DELETE FROM %I
+            WHERE ctid IN (SELECT ctid FROM duplicates)
+            $f$, table_name, table_name
+        );
         GET DIAGNOSTICS rows_deleted = ROW_COUNT;
 
         iteration := iteration + 1;
@@ -67,7 +70,6 @@ BEGIN
               ON a.ctid <> b.ctid
               AND a.product_id = b.product_id
               AND a.event_type = b.event_type
-            --   AND EXTRACT(EPOCH FROM b.event_time - a.event_time) = 1
               AND b.event_time = a.event_time + INTERVAL '1 second' -- Faster than epoch
             LIMIT 200
         )
