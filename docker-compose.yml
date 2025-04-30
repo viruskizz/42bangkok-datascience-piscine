@@ -25,7 +25,6 @@ services:
       - ./ds02:/home/jovyan/work/ds02
     ports:
       - 8888:8888
-    user: 1000:100
     environment:
       - JUPYTER_TOKEN
       - POSTGRES_DB

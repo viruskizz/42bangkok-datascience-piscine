@@ -20,7 +20,7 @@ prepare:
 	docker exec -it ${CONTAINER_NAME} bash -c "cd /usr/src/app/; ./scripts/prepare.sh"
 
 jupyter:
-	docker exec -it ${NAME}-jupyter /bin/bash
+	docker exec -it -u root ${NAME}-jupyter /bin/bash
 
 log:
 	docker logs datascience-piscine-jupyter
