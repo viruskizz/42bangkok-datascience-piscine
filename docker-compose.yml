@@ -23,6 +23,7 @@ services:
     restart: always
     volumes:
       - ./ds02:/home/jovyan/work/ds02
+      - ./scripts:/home/jovyan/scripts
     ports:
       - 8888:8888
     environment:
