@@ -1,4 +1,4 @@
-# DataAnalytic
+# Data Analytic
 
 ## Tools
 - [Jupyter](https://jupyter.org/)
