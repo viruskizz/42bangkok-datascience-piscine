@@ -52,7 +52,8 @@ docker-compose up --build
 - pgAdmin: http://localhost:8000?token={JUPYTER_TOKEN}
 - Jupyter Notebook: http://localhost:8888
 
-📚 Module Overviews
+## 📚 Module Overviews
+
 1. Data Engineer (ds00/)
 Set up PostgreSQL using Docker, import CSV data, and automate table creation processes.
 
@@ -68,5 +69,5 @@ Apply machine learning algorithms for predictive modeling and clustering.
 5. Data Scientist 2 (ds04/)
 Engage in advanced data science projects, including deep learning and natural language processing.
 
-📝 License
+## 📝 License
 This project is licensed under the MIT License. See the LICENSE file for details.
