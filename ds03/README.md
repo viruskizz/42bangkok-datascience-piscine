@@ -4,3 +4,4 @@
 - [Correlation TH](https://www.coraline.co.th/single-post/basic-statistic-2)
 - [Correlation Sample](https://rpsychologist.com/correlation/)
 - [Normalization](https://www.datacamp.com/tutorial/normalization-vs-standardization)
+- [Train and Test Dataset](https://www.v7labs.com/blog/train-validation-test-set)
