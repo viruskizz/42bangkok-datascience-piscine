@@ -9,6 +9,7 @@ services:
     volumes:
       - ./ds00:/usr/src/app/ds00
       - ./ds01:/usr/src/app/ds01
+      - ./ds03:/usr/src/app/ds03
       - ./scripts:/usr/src/app/scripts
     ports:
       - 5432:5432
@@ -23,6 +24,7 @@ services:
     restart: always
     volumes:
       - ./ds02:/home/jovyan/work/ds02
+      - ./ds03:/home/jovyan/work/ds03
       - ./scripts:/home/jovyan/scripts
     ports:
       - 8888:8888
