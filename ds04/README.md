@@ -9,3 +9,4 @@
 - [PCA](https://builtin.com/data-science/step-step-explanation-principal-component-analysis)
 - [multicollinearity TH](https://lengyi.medium.com/multicollinearity-test-python-608b090106f3)
 - [Random Tree TH](https://medium.com/@witchapongdaroontham/%E0%B8%A3%E0%B8%B9%E0%B9%89%E0%B8%88%E0%B8%B1%E0%B8%81-decision-tree-random-forrest-%E0%B9%81%E0%B8%A5%E0%B8%B0-xgboost-part-1-cb49c4ac1315)
+- [Random Forest](https://www.datacamp.com/tutorial/random-forests-classifier-python)
